@@ -136,7 +136,6 @@
     <orderEntry type="library" name="Maven: org.modelmapper:modelmapper:2.3.3" level="project" />
     <orderEntry type="library" name="Maven: com.auth0:java-jwt:3.6.0" level="project" />
     <orderEntry type="library" name="Maven: com.simple:account-api:1.0.0" level="project" />
-    <orderEntry type="library" name="Maven: com.simple:mail-api:1.0.1" level="project" />
     <orderEntry type="library" name="Maven: org.bitbucket.b_c:jose4j:0.7.2" level="project" />
     <orderEntry type="library" name="Maven: com.alibaba:fastjson:1.2.59" level="project" />
     <orderEntry type="library" scope="PROVIDED" name="Maven: org.projectlombok:lombok:1.18.4" level="project" />
