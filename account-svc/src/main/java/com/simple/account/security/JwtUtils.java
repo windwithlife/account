@@ -25,7 +25,7 @@ import java.util.Map;
 
 public class JwtUtils {
     static RsaJsonWebKey jwk = null;
-
+    static  String keyId = "define_test";
 
 
 
@@ -43,9 +43,9 @@ public class JwtUtils {
 
     //@GetMapping(path = "/createJWK")
     public static String generateJWK() throws Exception {
-        String keyId = "define_test";
+        //String keyId = "define_test";
         RsaJsonWebKey jwk = JwtUtils.generateJWKCreator();
-        jwk.setKeyId(keyId);
+        jwk.setKeyId(JwtUtils.keyId);
         jwk.setAlgorithm(AlgorithmIdentifiers.RSA_USING_SHA256);
         String publicKey = jwk.toJson(RsaJsonWebKey.OutputControlLevel.PUBLIC_ONLY);
         System.out.println("publicKey: " + publicKey);
@@ -54,7 +54,7 @@ public class JwtUtils {
     }
 
     public static RsaJsonWebKey generateJWKCreator() throws Exception {
-        String keyId = "test";
+        String keyId = JwtUtils.keyId;
 
         if (null == JwtUtils.jwk) {
             JwtUtils.jwk = RsaJwkGenerator.generateJwk(2048);
@@ -77,7 +77,7 @@ public class JwtUtils {
     }
 
     public static RsaJsonWebKey refreshJWKCreator() throws Exception {
-        String keyId = "test";
+        String keyId = JwtUtils.keyId;
         JwtUtils.jwk = RsaJwkGenerator.generateJwk(2048);
         RsaJsonWebKey jwk = JwtUtils.jwk;
         jwk.setKeyId(keyId);
