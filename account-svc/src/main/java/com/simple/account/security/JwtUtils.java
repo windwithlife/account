@@ -45,8 +45,8 @@ public class JwtUtils {
     public static String generateJWK() throws Exception {
         //String keyId = "define_test";
         RsaJsonWebKey jwk = JwtUtils.generateJWKCreator();
-        jwk.setKeyId(JwtUtils.keyId);
-        jwk.setAlgorithm(AlgorithmIdentifiers.RSA_USING_SHA256);
+        //jwk.setKeyId(JwtUtils.keyId);
+        //jwk.setAlgorithm(AlgorithmIdentifiers.RSA_USING_SHA256);
         String publicKey = jwk.toJson(RsaJsonWebKey.OutputControlLevel.PUBLIC_ONLY);
         System.out.println("publicKey: " + publicKey);
         return publicKey;
