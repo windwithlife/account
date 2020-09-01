@@ -57,34 +57,35 @@ public class JwtUtils {
         String keyId = JwtUtils.keyId;
 
         if (null == JwtUtils.jwk) {
-            JwtUtils.jwk = RsaJwkGenerator.generateJwk(2048);
+            JwtUtils.jwk = JwtUtils.refreshJWKCreator(JwtUtils.keyId);
+            //JwtUtils.jwk = RsaJwkGenerator.generateJwk(2048);
+            //JwtUtils.jwk.setKeyId(JwtUtils.keyId);
+            //JwtUtils.jwk.setAlgorithm(AlgorithmIdentifiers.RSA_USING_SHA256);
+            //return JwtUtils.jwk;
         }
 
-        RsaJsonWebKey jwk = JwtUtils.jwk;
+        //RsaJsonWebKey jwk = JwtUtils.jwk;
         //PublicKey key = jwk.getPublicKey();
         //RSAPublicKey keyRSA = jwk.getRsaPublicKey();
-        jwk.setKeyId(keyId);
-        jwk.setAlgorithm(AlgorithmIdentifiers.RSA_USING_SHA256);
+        //jwk.setKeyId(keyId);
+        //jwk.setAlgorithm(AlgorithmIdentifiers.RSA_USING_SHA256);
         //System.out.println(encodeBase64(jwk.getRsaPublicKey().getEncoded()));
         //System.out.println(encodeBase64(jwk.getRsaPrivateKey().getEncoded()));
-        String publicKey = jwk.toJson(RsaJsonWebKey.OutputControlLevel.PUBLIC_ONLY);
+        //String publicKey = JwtUtils.jwk.toJson(RsaJsonWebKey.OutputControlLevel.PUBLIC_ONLY);
         //String privateKey = jwk.toJson(RsaJsonWebKey.OutputControlLevel.INCLUDE_PRIVATE);
         //System.out.println("publicKey: " + publicKey);
         //System.out.println("privateKey: " + privateKey);
 
-        return jwk;
+        return  JwtUtils.jwk;
 
     }
 
-    public static RsaJsonWebKey refreshJWKCreator() throws Exception {
-        String keyId = JwtUtils.keyId;
-        JwtUtils.jwk = RsaJwkGenerator.generateJwk(2048);
-        RsaJsonWebKey jwk = JwtUtils.jwk;
+    public static RsaJsonWebKey refreshJWKCreator(String keyId) throws Exception {
+        RsaJsonWebKey jwk  = RsaJwkGenerator.generateJwk(2048);
         jwk.setKeyId(keyId);
         jwk.setAlgorithm(AlgorithmIdentifiers.RSA_USING_SHA256);
-        String publicKey = jwk.toJson(RsaJsonWebKey.OutputControlLevel.PUBLIC_ONLY);
+        //String publicKey = jwk.toJson(RsaJsonWebKey.OutputControlLevel.PUBLIC_ONLY);
         return jwk;
-
     }
 
     //@GetMapping(path = "/createToken")
