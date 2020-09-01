@@ -96,9 +96,9 @@ public class JwtUtils {
         //claims.setAudience("Audience"); // to whom the token is intended to be sent
         //claims.setExpirationTimeMinutesInTheFuture(10); // time when the token will expire (10 minutes from now)
         //claims.setGeneratedJwtId(); // a unique identifier for the token
-        claims.setIssuedAtToNow();  // when the token was issued/created (now)
-        claims.setNotBeforeMinutesInThePast(1); // time before which the token is not yet valid (2 minutes ago)
-        claims.setSubject("subject"); // the subject/principal is whom the token is about
+        //claims.setIssuedAtToNow();  // when the token was issued/created (now)
+        //claims.setNotBeforeMinutesInThePast(1); // time before which the token is not yet valid (2 minutes ago)
+        //claims.setSubject("subject"); // the subject/principal is whom the token is about
         claims.setClaim("email", "mailx@example.com"); // additional claims/attributes about the subject can be added
         //List<String> groups = Arrays.asList("group-one", "other-group", "group-three");
         //claims.setStringListClaim("groups", groups); // multi-valued claims work too and will end up as a JSON array
