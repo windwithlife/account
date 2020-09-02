@@ -9,6 +9,7 @@ META-INF/spring-configuration-metadata.json
 com/simple/account/model/AccountSecret.class
 com/simple/account/config/AppConfig.class
 com/simple/account/security/VerificationKeys.class
+com/simple/account/config/AppConfig$1.class
 com/simple/account/props/AppProps$AppPropsBuilder.class
 com/simple/account/repo/AccountSecretRepo.class
 com/simple/account/config/SwaggerConfig.class

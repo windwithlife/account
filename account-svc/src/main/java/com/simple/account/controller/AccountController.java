@@ -91,15 +91,20 @@ public class AccountController {
         return genericAccountResponse;
     }
 
+//    @PostMapping(path = "/signup")
+////    public GenericAccountResponse signupAccount(@RequestBody @Valid CreateAccountRequest request) {
+////        return this.createAccount(request);
+////    }
     @PostMapping(path = "/signup")
     public GenericAccountResponse signupAccount(@RequestBody @Valid CreateAccountRequest request) {
         return this.createAccount(request);
     }
-    @GetMapping(path = "/signuptest")
+    @GetMapping(path = "/register")
     public GenericAccountResponse signupAccountTest(@RequestParam String name,  @RequestParam String email,@RequestParam String phoneNumber) {
         CreateAccountRequest request = CreateAccountRequest.builder().name(name).email(email).phoneNumber(phoneNumber).build();
         return this.createAccount(request);
     }
+
     @GetMapping(path = "/get_account_by_phonenumber")
     @Authorize(value = {
             AuthConstant.AUTHORIZATION_SUPPORT_USER,

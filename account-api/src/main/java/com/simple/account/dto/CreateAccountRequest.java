@@ -19,6 +19,7 @@ public class CreateAccountRequest {
     private String name;
     @Email(message = "Invalid email")
     private String email;
+    private String password;
     @PhoneNumber
     private String phoneNumber;
 

@@ -132,19 +132,7 @@ public class AccountService {
             throw new ServiceException(errMsg, ex);
         }
 
-        //serviceHelper.syncUserAsync(account.getId());
 
-//        if (StringUtils.hasText(email)) {
-//            // Email confirmation
-//
-//            String emailName = name;
-//            if (StringUtils.isEmpty(emailName)) {
-//                emailName = "there";
-//            }
-//
-//            String subject = "Activate your Staffjoy account";
-//            this.sendEmail(account.getId(), email, emailName, subject, AccountConstant.ACTIVATE_ACCOUNT_TMPL, true);
-//        }
 
         // todo - sms onboarding (if worker??)
 //

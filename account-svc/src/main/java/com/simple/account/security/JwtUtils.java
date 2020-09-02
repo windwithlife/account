@@ -8,6 +8,7 @@ import com.auth0.jwt.exceptions.JWTCreationException;
 import com.auth0.jwt.interfaces.Claim;
 import com.auth0.jwt.interfaces.DecodedJWT;
 import com.simple.account.controller.AccountController;
+import org.jose4j.jwk.JsonWebKey;
 import org.jose4j.jwk.RsaJsonWebKey;
 import org.jose4j.jwk.RsaJwkGenerator;
 import org.jose4j.jws.AlgorithmIdentifiers;
@@ -48,7 +49,10 @@ public class JwtUtils {
         //jwk.setKeyId(JwtUtils.keyId);
         //jwk.setAlgorithm(AlgorithmIdentifiers.RSA_USING_SHA256);
         String publicKey = jwk.toJson(RsaJsonWebKey.OutputControlLevel.PUBLIC_ONLY);
+        String other     = jwk.toJson(RsaJsonWebKey.OutputControlLevel.INCLUDE_SYMMETRIC);
         System.out.println("publicKey: " + publicKey);
+        System.out.println("other-data: " + other);
+
         return publicKey;
 
     }
