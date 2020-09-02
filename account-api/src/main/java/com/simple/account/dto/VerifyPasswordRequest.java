@@ -14,8 +14,9 @@ import javax.validation.constraints.NotEmpty;
 @NoArgsConstructor
 @Builder
 public class VerifyPasswordRequest {
-    @Email
     @NotBlank
+    private String name;
+    @Email
     private String email;
     @NotBlank
     private String password;
