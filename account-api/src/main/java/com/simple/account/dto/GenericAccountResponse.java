@@ -11,4 +11,5 @@ import com.simple.common.api.BaseResponse;
 @EqualsAndHashCode(callSuper = true)
 public class GenericAccountResponse extends BaseResponse {
     private AccountDto account;
+    private String token;
 }
