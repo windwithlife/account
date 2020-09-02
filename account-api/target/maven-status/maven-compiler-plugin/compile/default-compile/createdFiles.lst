@@ -14,6 +14,7 @@ com/simple/account/client/AccountClient.class
 com/simple/account/dto/EmailChangeRequest$EmailChangeRequestBuilder.class
 com/simple/account/AccountConstant.class
 com/simple/account/dto/CreateAccountRequest$CreateAccountRequestBuilder.class
+com/simple/account/dto/LoginResponse.class
 com/simple/account/dto/SyncUserRequest$SyncUserRequestBuilder.class
 com/simple/account/dto/LoginRequest$LoginRequestBuilder.class
 com/simple/account/dto/GetOrCreateRequest$GetOrCreateRequestBuilder.class

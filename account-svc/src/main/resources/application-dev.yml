@@ -8,7 +8,10 @@ spring:
 server:
   port: 8888
 staffjoy:
+  domainName: koudaibook.com
   email-service-endpoint: http://localhost:8088
+  common:
+    sentry-dsn: https://80bbf4ae778b525f9fe72e2813cd5246@sentry.io/1271087
 management:
   endpoints:
     web:

@@ -81,7 +81,7 @@ public class AccountService {
         if (existingAccount != null) {
             return this.convertToDto(existingAccount);
         }
-        return this.create(name, email, phoneNumber);
+        return this.create(name, email, phoneNumber, "password");
     }
 
     public AccountDto getAccountByPhoneNumber(String phoneNumber) {
@@ -92,18 +92,27 @@ public class AccountService {
         return this.convertToDto(account);
     }
 
-    public AccountDto create(String name, String email, String phoneNumber) {
+    public AccountDto create(String name, String email, String phoneNumber,String pwd) {
         if (StringUtils.hasText(email)) {
             // Check to see if account exists
             Account foundAccount = accountRepo.findAccountByEmail(email);
             if (foundAccount != null) {
-                throw new ServiceException("A user with that email already exists. Try a password reset");
+                throw new ServiceException("A user with that email already exists. Try another email");
             }
         }
+
+        if (StringUtils.hasText(name)) {
+            // Check to see if account exists
+            Account foundAccount = accountRepo.findAccountByName(name);
+            if (foundAccount != null) {
+                throw new ServiceException("A user with that name already exists. Try a new name");
+            }
+        }
+
         if (StringUtils.hasText(phoneNumber)) {
             Account foundAccount = accountRepo.findAccountByPhoneNumber(phoneNumber);
             if (foundAccount != null) {
-                throw new ServiceException("A user with that phonenumber already exists. Try a password reset");
+                throw new ServiceException("A user with that phonenumber already exists. Try a new phonenumber");
             }
         }
 
@@ -125,7 +134,9 @@ public class AccountService {
         account.setMemberSince(Instant.now());
 
         try {
-            accountRepo.save(account);
+            Account result = accountRepo.save(account);
+            String userId = result.getId();
+            this.updatePassword(userId, pwd);
         } catch (Exception ex) {
             String errMsg = "Could not create user account";
             serviceHelper.handleException(logger, ex, errMsg);
@@ -275,9 +286,9 @@ public class AccountService {
         this.trackEventWithAuthCheck("password_updated");
     }
 
-    public AccountDto verifyPassword(String email, String password) {
+    public AccountDto verifyPassword(String name, String password) {
         //AccountSecret accountSecret = accountSecretRepo.findAccountSecretByEmail(email);
-        AccountSecret accountSecret = accountSecretRepo.findAccountSecretByName(email);
+        AccountSecret accountSecret = accountSecretRepo.findAccountSecretByName(name);
         if (accountSecret == null) {
             throw new ServiceException(ResultCode.NOT_FOUND, "account with specified email not found");
         }

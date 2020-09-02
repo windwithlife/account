@@ -8,6 +8,11 @@
   ],
   "properties": [
     {
+      "name": "staffjoy.domain-name",
+      "type": "java.lang.String",
+      "sourceType": "com.simple.account.props.AppProps"
+    },
+    {
       "name": "staffjoy.intercom-access-token",
       "type": "java.lang.String",
       "sourceType": "com.simple.account.props.AppProps"

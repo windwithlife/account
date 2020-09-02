@@ -20,4 +20,5 @@ public class AppProps {
     private String intercomAccessToken;
     @NotNull
     private String signingSecret;
+    private String domainName;
 }

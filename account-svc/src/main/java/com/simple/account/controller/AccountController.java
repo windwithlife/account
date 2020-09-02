@@ -14,6 +14,7 @@ import com.simple.account.dto.*;
 import com.simple.account.security.JwtUtils;
 import com.simple.account.security.VerificationKeys;
 import com.simple.account.service.AccountService;
+import com.simple.common.api.ResultCode;
 import com.simple.common.auth.*;
 import org.jose4j.jwk.RsaJsonWebKey;
 import org.jose4j.jwk.RsaJwkGenerator;
@@ -86,7 +87,7 @@ public class AccountController {
                     AuthConstant.AUTHORIZATION_COMPANY_SERVICE
     })
     public GenericAccountResponse createAccount(@RequestBody @Valid CreateAccountRequest request) {
-        AccountDto accountDto = accountService.create(request.getName(), request.getEmail(), request.getPhoneNumber());
+        AccountDto accountDto = accountService.create(request.getName(), request.getEmail(), request.getPhoneNumber(),request.getPassword());
         GenericAccountResponse genericAccountResponse = new GenericAccountResponse(accountDto);
         return genericAccountResponse;
     }
@@ -191,13 +192,10 @@ public class AccountController {
         UpdatePasswordRequest updateRequest =  UpdatePasswordRequest.builder().userId(userId).password(password).build();
         return  this.updatePassword(updateRequest);
     }
+
     @PostMapping(path = "/verify_password")
-    @Authorize(value = {
-            AuthConstant.AUTHORIZATION_WWW_SERVICE,
-            AuthConstant.AUTHORIZATION_SUPPORT_USER
-    })
     public GenericAccountResponse verifyPassword(@RequestBody @Valid VerifyPasswordRequest request) {
-        AccountDto accountDto = accountService.verifyPassword(request.getEmail(), request.getPassword());
+        AccountDto accountDto = accountService.verifyPassword(request.getName(), request.getPassword());
 
         GenericAccountResponse genericAccountResponse = new GenericAccountResponse(accountDto);
         return genericAccountResponse;
@@ -276,7 +274,48 @@ public class AccountController {
         Sessions.logout(envConfig.getExternalApex(), response);
         return "redirect:/";
     }
-    @RequestMapping(value = "/login")
+
+    @PostMapping(path = "/login")
+    public LoginResponse loginPost(@RequestBody @Valid LoginRequest request, HttpServletResponse response) {
+        AccountDto account = null;
+        GenericAccountResponse genericAccountResponse = null;
+        LoginResponse lastResponse = null;
+        try {
+            VerifyPasswordRequest verifyPasswordRequest = VerifyPasswordRequest.builder()
+                    .email(request.getEmail())
+                    .name(request.getName())
+                    .password(request.getPassword())
+                    .build();
+            genericAccountResponse = this.verifyPassword(verifyPasswordRequest);
+        } catch (Exception ex) {
+            throw ex;
+        }
+        if (genericAccountResponse != null) {
+            if (!genericAccountResponse.isSuccess()) {
+                throw new ServiceException(ResultCode.UN_AUTHORIZED, "fail to login");
+            } else {
+                account = genericAccountResponse.getAccount();
+            }
+        }
+
+
+        if (account != null) { // login success
+            String token = JwtUtils.createToken2(account.getId());
+            lastResponse = new LoginResponse(account, token);
+            // set cookie
+            this.writeTokenToCookie(
+                    account.isSupport(),
+                    !StringUtils.isEmpty(request.getRememberMe()),
+                    token,
+                    //envConfig.getExternalApex(),
+                    "localhost",
+                    //appProps.getDomainName(),
+                    response);
+        }
+
+        return lastResponse;
+    }
+    @RequestMapping(value = "/loginEx")
     public BaseResponse login(@RequestParam(value="return_to", required = false) String returnTo, // POST and GET are in the same handler - reset
                         @RequestParam(value="name", required = false) String name,
                               @RequestParam(value="email", required = false) String email,
@@ -297,21 +336,24 @@ public class AccountController {
                 genericAccountResponse = this.verifyPassword(verifyPasswordRequest);
             } catch (Exception ex) {
                 //helperService.logException(logger, ex, "fail to verify user password");
+                throw ex;
             }
             if (genericAccountResponse != null) {
                 if (!genericAccountResponse.isSuccess()) {
                     //helperService.logError(logger, genericAccountResponse.getMessage());
+                    throw new ServiceException(ResultCode.UN_AUTHORIZED, "fail to login");
                 } else {
                     account = genericAccountResponse.getAccount();
                 }
             }
 
             if (account != null) { // login success
+                String token = JwtUtils.createToken2(account.getId());
                 // set cookie
-                this.writeTokenloginUser(account.getId(),
+                this.writeTokenToCookie(
                         account.isSupport(),
                         !StringUtils.isEmpty(rememberMe),
-                        appProps.getSigningSecret(),
+                        token,
                         //envConfig.getExternalApex(),
                         "127.0.0.1",
                         response);
@@ -350,7 +392,7 @@ public class AccountController {
         return baseResponse;
     }
 
-    private  void writeTokenloginUser(String userId, boolean support, boolean rememberMe, String signingSecret, String externalApex, HttpServletResponse response) {
+    private  void writeTokenToCookie(boolean support, boolean rememberMe, String token, String externalApex, HttpServletResponse response) {
         long duration;
         if (rememberMe) {
             duration = LONG_SESSION;
@@ -359,7 +401,8 @@ public class AccountController {
         }
 
         int maxAge = (int)(duration / 1000L);
-        String token = Sign.generateSessionToken(userId, signingSecret, support, duration);
+        //String token = Sign.generateSessionToken(userId, signingSecret, support, duration);
+        //String token = JwtUtils.createToken2(userId);
         Cookie cookie = new Cookie("Authentication", token);
         cookie.setPath("/");
         cookie.setDomain(externalApex);
@@ -399,7 +442,7 @@ public class AccountController {
     }
     @GetMapping(path = "/createToken2")
     public String createToken2() throws Exception {
-        return JwtUtils.createToken2();
+        return JwtUtils.createToken2("1111");
     }
     @GetMapping(path = "/vtoken")
     public String verifyTokenValues(@RequestParam(value="token", required = false) String token){

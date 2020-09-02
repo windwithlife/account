@@ -57,16 +57,20 @@ public class JwtUtils {
 
     }
 
-    public static RsaJsonWebKey generateJWKCreator() throws Exception {
+    public static RsaJsonWebKey generateJWKCreator(){
         String keyId = JwtUtils.keyId;
-
-        if (null == JwtUtils.jwk) {
-            JwtUtils.jwk = JwtUtils.refreshJWKCreator(JwtUtils.keyId);
-            //JwtUtils.jwk = RsaJwkGenerator.generateJwk(2048);
-            //JwtUtils.jwk.setKeyId(JwtUtils.keyId);
-            //JwtUtils.jwk.setAlgorithm(AlgorithmIdentifiers.RSA_USING_SHA256);
-            //return JwtUtils.jwk;
+        try{
+            if (null == JwtUtils.jwk) {
+                JwtUtils.jwk = JwtUtils.refreshJWKCreator(JwtUtils.keyId);
+                //JwtUtils.jwk = RsaJwkGenerator.generateJwk(2048);
+                //JwtUtils.jwk.setKeyId(JwtUtils.keyId);
+                //JwtUtils.jwk.setAlgorithm(AlgorithmIdentifiers.RSA_USING_SHA256);
+                //return JwtUtils.jwk;
+            }
+        }catch (Exception ex){
+            ex.printStackTrace();
         }
+
 
         //RsaJsonWebKey jwk = JwtUtils.jwk;
         //PublicKey key = jwk.getPublicKey();
@@ -106,7 +110,6 @@ public class JwtUtils {
         claims.setClaim("email", "mailx@example.com"); // additional claims/attributes about the subject can be added
         //List<String> groups = Arrays.asList("group-one", "other-group", "group-three");
         //claims.setStringListClaim("groups", groups); // multi-valued claims work too and will end up as a JSON array
-
         JsonWebSignature jws = new JsonWebSignature();
 
         // The payload of the JWS is JSON content of the JWT Claims
@@ -152,15 +155,17 @@ public class JwtUtils {
         return token;
     }
 
-    public static String createToken2() throws Exception {
-        RsaJsonWebKey rsaJsonWebKey = JwtUtils.generateJWKCreator();
-        RSAPublicKey publicKey = rsaJsonWebKey.getRsaPublicKey();
-        RSAPrivateKey privateKey = rsaJsonWebKey.getRsaPrivateKey();
+    public static String createToken2(String userOpenId) {
+
         try {
+            RsaJsonWebKey rsaJsonWebKey = JwtUtils.generateJWKCreator();
+            RSAPublicKey publicKey = rsaJsonWebKey.getRsaPublicKey();
+            RSAPrivateKey privateKey = rsaJsonWebKey.getRsaPrivateKey();
             Algorithm algorithm = Algorithm.RSA256(publicKey, privateKey);
             String token = JWT.create()
                     .withIssuer("auth0")
                     .withClaim("email", "mail@example.com")
+                    .withClaim("uid", userOpenId)
                     .sign(algorithm);
             return token;
         } catch (JWTCreationException exception) {
@@ -186,112 +191,3 @@ public class JwtUtils {
 
 }
 
-
-//
-//
-//import io.jsonwebtoken.Claims;
-//import io.jsonwebtoken.Jws;
-//import io.jsonwebtoken.Jwts;
-//import io.jsonwebtoken.SignatureAlgorithm;
-//import org.joda.time.DateTime;
-//
-//import java.security.PrivateKey;
-//import java.security.PublicKey;
-//import java.util.Base64;
-//import java.util.UUID;
-//
-//public class JwtUtils {
-//
-//    private static final  String JWT_PAYLOAD_USER_KEY = "user";
-//
-//    /**
-//     * 私钥加密 token
-//     * @param userInfo 载荷中的信息
-//     * @param privateKey 私钥
-//     * @param expire 过期时间， 分钟
-//     * @return
-//     */
-//    public static String generateTokenExpireInMinutes(Object userInfo, PrivateKey privateKey, int expire){
-//
-//        System.out.println(privateKey);
-//        if(userInfo == null){
-//            return null;
-//        }
-//        String token = Jwts.builder()
-//                .claim(JWT_PAYLOAD_USER_KEY, JsonUtils.toString(userInfo))
-//                .setId(createJTI())
-//                .setExpiration(DateTime.now().plusMinutes(expire).toDate())
-//                .signWith(privateKey, SignatureAlgorithm.RS256)
-//                .compact();
-//
-//        return token;
-//    }
-//
-//    /**
-//     * 私钥加密 token
-//     * @param userInfo 载荷中的信息
-//     * @param privateKey 私钥
-//     * @param expire 过期时间，秒
-//     * @return
-//     */
-//    public static String generateTokenExpireInSeconds(Object userInfo, PrivateKey privateKey, int expire){
-//
-//        if(userInfo == null){
-//            return null;
-//        }
-//        String token = Jwts.builder()
-//                .claim(JWT_PAYLOAD_USER_KEY, JsonUtils.toString(userInfo))
-//                .setId(createJTI())
-//                .setExpiration(DateTime.now().plusSeconds(expire).toDate())
-//                .signWith(privateKey, SignatureAlgorithm.RS256)
-//                .compact();
-//
-//        return token;
-//    }
-//
-//    private static String createJTI(){
-//        return new String(Base64.getEncoder().encode(UUID.randomUUID().toString().getBytes()));
-//    }
-//
-//
-//    /**
-//     * 公钥解析 token
-//     * @param token
-//     * @param publicKey
-//     * @return
-//     */
-//    public static Jws<Claims> parserToken(String token, PublicKey publicKey){
-//
-//        return Jwts.parser().setSigningKey(publicKey).parseClaimsJws(token);
-//
-//    }
-//
-//    /**
-//     * 获取 token 中的载荷信息
-//     * @param token
-//     * @param publicKey
-//     * @param userType
-//     * @param <T>
-//     * @return
-//     */
-//    public static <T> Payload<T> getInfoFromToken(String token, PublicKey publicKey, Class<T> userType) {
-//        Jws<Claims> claimsJws = parserToken(token, publicKey);
-//        Claims body = claimsJws.getBody();
-//        Payload<T> claims = new Payload<>();
-//        claims.setId(body.getId());
-//        claims.setUserInfo(JsonUtils.toBean(body.get(JWT_PAYLOAD_USER_KEY).toString(), userType));
-//        claims.setExpiration(body.getExpiration());
-//        return claims;
-//    }
-//
-//    public static <T> Payload<T> getInfoFromToken(String token, PublicKey publicKey) {
-//        Jws<Claims> claimsJws = parserToken(token, publicKey);
-//        Claims body = claimsJws.getBody();
-//        Payload<T> claims = new Payload<>();
-//        claims.setId(body.getId());
-//        claims.setExpiration(body.getExpiration());
-//        return claims;
-//    }
-//
-//
-//}

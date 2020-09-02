@@ -8,6 +8,7 @@
 /Users/ctrip/program/java/account/account-api/src/main/java/com/simple/account/dto/ListAccountResponse.java
 /Users/ctrip/program/java/account/account-api/src/main/java/com/simple/account/dto/CreateAccountRequest.java
 /Users/ctrip/program/java/account/account-api/src/main/java/com/simple/account/dto/PasswordResetRequest.java
+/Users/ctrip/program/java/account/account-api/src/main/java/com/simple/account/dto/LoginResponse.java
 /Users/ctrip/program/java/account/account-api/src/main/java/com/simple/account/dto/GenericAccountResponse.java
 /Users/ctrip/program/java/account/account-api/src/main/java/com/simple/account/dto/SyncUserRequest.java
 /Users/ctrip/program/java/account/account-api/src/main/java/com/simple/account/dto/VerifyPasswordRequest.java
