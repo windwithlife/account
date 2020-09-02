@@ -13,3 +13,4 @@
 /Users/ctrip/program/java/account/account-api/src/main/java/com/simple/account/dto/VerifyPasswordRequest.java
 /Users/ctrip/program/java/account/account-api/src/main/java/com/simple/account/dto/EmailConfirmation.java
 /Users/ctrip/program/java/account/account-api/src/main/java/com/simple/account/client/AccountClient.java
+/Users/ctrip/program/java/account/account-api/src/main/java/com/simple/account/dto/LoginRequest.java

@@ -3,6 +3,7 @@ com/simple/account/dto/AccountDto$AccountDtoBuilder.class
 com/simple/account/dto/AccountDto.class
 com/simple/account/dto/EmailConfirmation$EmailConfirmationBuilder.class
 com/simple/account/dto/ListAccountResponse.class
+com/simple/account/dto/LoginRequest.class
 com/simple/account/dto/UpdatePasswordRequest$UpdatePasswordRequestBuilder.class
 com/simple/account/dto/GetOrCreateRequest.class
 com/simple/account/dto/TrackEventRequest.class
@@ -14,6 +15,7 @@ com/simple/account/dto/EmailChangeRequest$EmailChangeRequestBuilder.class
 com/simple/account/AccountConstant.class
 com/simple/account/dto/CreateAccountRequest$CreateAccountRequestBuilder.class
 com/simple/account/dto/SyncUserRequest$SyncUserRequestBuilder.class
+com/simple/account/dto/LoginRequest$LoginRequestBuilder.class
 com/simple/account/dto/GetOrCreateRequest$GetOrCreateRequestBuilder.class
 com/simple/account/dto/EmailChangeRequest.class
 com/simple/account/dto/VerifyPasswordRequest.class
