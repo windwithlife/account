@@ -1,7 +1,7 @@
 package com.simple.account.dto;
 
-import lombok.*;
 import com.simple.common.api.BaseResponse;
+import lombok.*;
 
 @Getter
 @Setter
@@ -9,6 +9,7 @@ import com.simple.common.api.BaseResponse;
 @AllArgsConstructor
 @ToString(callSuper = true)
 @EqualsAndHashCode(callSuper = true)
-public class GenericAccountResponse extends BaseResponse {
+public class LoginResponse extends BaseResponse {
     private AccountDto account;
+    private String token;
 }
